@@ -41,7 +41,7 @@ userRouting.get('/getUsers', async (request: express.Request, response: express.
     }
 })
 
-userRouting.get('/getUser/:id', async (request: express.Request, response: express.Response) => {
+userRouting.get('/getsingleuser/:id', async (request: express.Request, response: express.Response) => {
     try {
         let userId = request.params.id;
         let database = getDatabase()
@@ -57,5 +57,49 @@ userRouting.get('/getUser/:id', async (request: express.Request, response: expre
 
     }
 })
+
+
+userRouting.put('/updateuser', async (request: express.Request, response: express.Response) => {
+    try {
+        let body = request.body;
+        let database = getDatabase()
+        let collection = database.collection('users');
+        let userinfo = {
+            "name": body.name,
+            
+            "email" : body.email
+        }
+        const update = await collection.updateOne({ "_id": new ObjectId(body.userId) }, { '$set': userinfo });
+
+        response.status(200).json({
+            'response': update
+        })
+
+    } catch (error) {
+        console.log(error)
+
+    }
+})
+
+
+
+userRouting.delete('/deleteuser/:id', async (request: express.Request, response: express.Response) => {
+    try {
+        let userId = request.params.id;
+        let database = getDatabase()
+        let collection = database.collection('users');
+       
+        const deleted = await collection.deleteOne({ "_id": new ObjectId(userId) });
+
+        response.status(200).json({
+            'response': deleted
+        })
+
+    } catch (error) {
+        console.log(error)
+
+    }
+})
+
 
 export default userRouting;
