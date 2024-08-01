@@ -1,59 +1,61 @@
 import express from 'express';
+import { getDatabase } from '../MongoDb/database';
+import { ObjectId } from 'mongodb';
 
 const userRouting = express.Router();
 
-// userRouting.get('/', (request: express.Request, response: express.Response) => {
-//     response.status(200)
-//     response.send(
-//         "<h1>This is New ExpressJs Server Method Get</h1>"
-//     )
+userRouting.post('/createUser', async (request: express.Request, response: express.Response) => {
 
-// })
+    try {
+        let database = getDatabase();
 
-// userRouting.post('/createusers', (request: express.Request, response: express.Response) => {
-//     response.status(200)
-//     response.send(
-//         "<h1>This is New ExpressJs Server Method Post</h1>"
-//     )
+        let collection = database.collection('users');
 
-// })
-// userRouting.put('/updateusers', (request: express.Request, response: express.Response) => {
-//     response.status(200)
-//     response.send(
-//         "<h1>This is New ExpressJs Server Method Put</h1>"
-//     )
+        let body = request.body;
 
-// })
-// userRouting.delete('/deleteusers', (request: express.Request, response: express.Response) => {
-//     response.status(200)
-//     response.send(
-//         "<h1>This is New ExpressJs Server Method Delete</h1>"
-//     )
+        const data = await collection.insertOne(body)
 
-// })
+        response.status(200).json({
+            "response": data
+        })
+
+
+    } catch (error) {
+        console.log(error)
+    }
+
+});
+
+userRouting.get('/getUsers', async (request: express.Request, response: express.Response) => {
+    try {
+        let database = getDatabase()
+        let collection = database.collection('users');
+        const get = await collection.find({}).toArray();
+
+        response.status(200).json({
+            'response': get
+        })
+
+    } catch (error) {
+
+    }
+})
+
+userRouting.get('/getUser/:id', async (request: express.Request, response: express.Response) => {
+    try {
+        let userId = request.params.id;
+        let database = getDatabase()
+        let collection = database.collection('users');
+        const get = await collection.find({"_id" : new ObjectId(userId)}).toArray();
+
+        response.status(200).json({
+            'response': get
+        })
+
+    } catch (error) {
+        console.log(error)
+
+    }
+})
 
 export default userRouting;
-
-// userRouting.get('/login', (request: express.Request, response: express.Response) => {
-
-//     let body = request.body;
- 
-
-//     if (request.statusCode == 200 && body.name == 'shahwaiz') {
-//         response.status(200).json({
-//             'name': body.name,
-//             'email': body.email,
-//             'msg': 'Login Success'
-//         });
-
-//     }
-//     else {
-//         response.status(400).json({
-//             'name': body.name,
-//             'email': body.email,
-//             'msg': 'Invalid Email'
-//         });
-//     }
-
-
-// })

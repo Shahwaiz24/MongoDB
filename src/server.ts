@@ -1,6 +1,7 @@
 import express from 'express';
 import userRouting from './Routing/routing';
 import AppLoger from './App Loger/app_loger';
+import { connectToDatabase } from './MongoDb/database';
 
 const app: express.Application = express()
 app.use(AppLoger);
@@ -13,6 +14,8 @@ const port = 5000
 app.use('/v1/api/users', userRouting),
 
 
-    app.listen(port, hostName, () => {
-        console.log(`http://${hostName}:${port}`)
+    app.listen(port, hostName, async () => {
+        await connectToDatabase();
+
+        console.log(`http://${hostName}:${port}/v1/api/users`)
     })
