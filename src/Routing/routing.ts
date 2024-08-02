@@ -1,5 +1,5 @@
 import express from 'express';
-import { getDatabase } from '../MongoDb/database';
+import { getDatabase } from '../config/database';
 import { ObjectId } from 'mongodb';
 
 const userRouting = express.Router();
@@ -46,7 +46,7 @@ userRouting.get('/getsingleuser/:id', async (request: express.Request, response:
         let userId = request.params.id;
         let database = getDatabase()
         let collection = database.collection('users');
-        const get = await collection.find({"_id" : new ObjectId(userId)}).toArray();
+        const get = await collection.find({ "_id": new ObjectId(userId) }).toArray();
 
         response.status(200).json({
             'response': get
@@ -66,8 +66,8 @@ userRouting.put('/updateuser', async (request: express.Request, response: expres
         let collection = database.collection('users');
         let userinfo = {
             "name": body.name,
-            
-            "email" : body.email
+
+            "email": body.email
         }
         const update = await collection.updateOne({ "_id": new ObjectId(body.userId) }, { '$set': userinfo });
 
@@ -88,7 +88,7 @@ userRouting.delete('/deleteuser/:id', async (request: express.Request, response:
         let userId = request.params.id;
         let database = getDatabase()
         let collection = database.collection('users');
-       
+
         const deleted = await collection.deleteOne({ "_id": new ObjectId(userId) });
 
         response.status(200).json({

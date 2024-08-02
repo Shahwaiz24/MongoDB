@@ -1,7 +1,7 @@
 import express from 'express';
 import userRouting from './Routing/routing';
 import AppLoger from './App Loger/app_loger';
-import { connectToDatabase } from './MongoDb/database';
+import { connectToDatabase } from './config/database';
 
 const app: express.Application = express()
 app.use(AppLoger);
