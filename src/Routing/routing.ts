@@ -1,8 +1,11 @@
 import express from 'express';
 import { getDatabase } from '../config/database';
 import { ObjectId } from 'mongodb';
+import { User_controller } from '../controller/user_controller';
 
 const userRouting = express.Router();
+
+userRouting.post('/signup', User_controller.signup);
 
 // userRouting.post('/createUser', async (request: express.Request, response: express.Response) => {
 

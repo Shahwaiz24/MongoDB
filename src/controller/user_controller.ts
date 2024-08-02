@@ -5,8 +5,6 @@ import { User_Model } from "../model/user_model";
 
 export class User_controller {
 
-
-
     static async signup(request: express.Request, response: express.Response) {
         let db: Db = getDatabase();
 
@@ -39,7 +37,7 @@ export class User_controller {
             response.status(200).send({
                 "status": "OK",
                 "response": "User Successfully SignUp",
-                "User Uid" : Object_Id
+                "User" : Object_Id
             });
         }
 
